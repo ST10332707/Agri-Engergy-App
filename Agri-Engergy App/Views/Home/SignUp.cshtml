@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<style>
+    .signup-form {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .signup-form h2 {
+        margin-bottom: 20px;
+    }
+
+    .signup-form input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .signup-form button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="signup-form">
+    <form asp-controller="User" asp-action="SignUp" method="post">
+        <h2>Create Profile:</h2>
+        <input type="text" name="UserName" placeholder="Name" required />
+        <input type="text" name="UserSurname" placeholder="Surname" required />
+        <input type="text" name="UserEmail" placeholder="example@gmail.com" required />
+        <button type="submit">Submit</button>
+    </form>
+</div>
