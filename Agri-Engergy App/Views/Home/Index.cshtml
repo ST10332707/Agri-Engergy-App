@@ -2,14 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h2>Welcome to the Farm Portal</h2>
-
 <div class="role-selection">
     <p>Select your role to log in:</p>
 
     <form method="post" action="/Account/Login">
-        <button type="submit" name="role" value="Farmer" class="btn btn-success">Login as Farmer</button>
-        <button type="submit" name="role" value="Employee" class="btn btn-primary">Login as Employee</button>
+        <button type="submit" name="role" value="Farmer" class="btn btn-success btn-block">Login as Farmer</button>
+        <button type="submit" name="role" value="Employee" class="btn btn-primary btn-block">Login as Employee</button>
     </form>
 </div>
 
@@ -19,9 +17,18 @@
         text-align: center;
     }
 
+    .role-selection form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+    }
+
     .role-selection button {
-        margin: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
+            width: 90%;
+            max-width: 400px;
+            margin: 10px auto;
+            padding: 12px;
+            font-size: 16px;
+            display: block;
     }
 </style>

@@ -1,43 +1,47 @@
-﻿@{
+﻿@model Agri_Engergy_App.Models.UserTable
+
+@{
     ViewData["Title"] = "Sign Up";
 }
 
 <style>
     .signup-form {
-        max-width: 400px;
-        margin: 50px auto;
-        padding: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-top: 40px;
     }
 
-    .signup-form h2 {
-        margin-bottom: 20px;
+    form {
+        width: 90%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
     }
 
-    .signup-form input {
-        width: 100%;
-        padding: 10px;
+    input, select, button {
         margin: 10px 0;
+        padding: 10px;
         font-size: 16px;
-        box-sizing: border-box;
-    }
-
-    .signup-form button {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        margin-top: 10px;
     }
 </style>
 
 <div class="signup-form">
-    <form asp-controller="User" asp-action="SignUp" method="post">
+    <form asp-controller="SignUp" asp-action="SignUp" method="post">
         <h2>Create Profile:</h2>
+
         <input type="text" name="UserName" placeholder="Name" required />
         <input type="text" name="UserSurname" placeholder="Surname" required />
         <input type="text" name="UserEmail" placeholder="example@gmail.com" required />
+
+        <select name="Role" required>
+            <option value="">-- Select Role --</option>
+            <option value="Farmer">Farmer</option>
+            <option value="Employee">Employee</option>
+        </select>
+
+        <input asp-for="Password" type="password" placeholder="Create Password" required />
+
         <button type="submit">Submit</button>
     </form>
 </div>
