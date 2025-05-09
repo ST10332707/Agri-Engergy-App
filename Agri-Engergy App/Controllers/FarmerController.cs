@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Agri_Engergy_App.Models;
 
 namespace Agri_Engergy_App.Controllers
 {
@@ -15,6 +16,32 @@ namespace Agri_Engergy_App.Controllers
             ViewBag.UserSurname = userSurname;
 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct(ProductTable p)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = p.InsertProduct(p);
+                if (result > 0)
+                {
+                    TempData["Success"] = "Product added successfully.";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Failed to add product.");
+                }
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult AddProduct()
+        {
+            return View(); // This should render Views/Farmer/AddProduct.cshtml
         }
     }
 }

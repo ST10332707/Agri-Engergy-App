@@ -1,11 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Farmer";
 }
-<h1>@ViewData["Title"]</h1>
 
 <h2>Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
 
 <p>You are successfully logged in.</p>
+
+<form asp-controller="Farmer" asp-action="AddProduct" method="get">
+    <button type="submit" class="btn btn-primary">Add New Product</button>
+</form>
 
 
 <!-- Logout Button -->
