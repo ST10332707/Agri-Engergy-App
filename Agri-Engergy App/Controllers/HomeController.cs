@@ -40,6 +40,12 @@ namespace Agri_Engergy_App.Controllers
             return RedirectToAction("Login", "Login");
         }
 
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); // Clear all session data
+            return RedirectToAction("Login", "Login"); // Redirect to login page
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

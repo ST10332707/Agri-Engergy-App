@@ -35,20 +35,27 @@ namespace Agri_Engergy_App.Controllers
                         string hashedPassword = reader.GetString(reader.GetOrdinal("Password"));
                         int userId = reader.GetInt32(reader.GetOrdinal("UserID"));
                         string userName = reader.GetString(reader.GetOrdinal("UserName"));
+                        string userSurname = reader.GetString(reader.GetOrdinal("UserSurname"));
                         string userRole = reader.GetString(reader.GetOrdinal("Role"));
 
                         // Verify password
                         if (BCrypt.Net.BCrypt.Verify(password, hashedPassword))
                         {
-                            // Store user ID in session
+                            //// Store user ID in session
+                            //HttpContext.Session.SetInt32("UserID", userId);
+                            //TempData["UserName"] = userName;
+
+                            // ✅ Store info in session
                             HttpContext.Session.SetInt32("UserID", userId);
-                            TempData["UserName"] = userName;
+                            HttpContext.Session.SetString("UserName", userName);
+                            HttpContext.Session.SetString("UserSurname", userSurname);
+                            HttpContext.Session.SetString("UserRole", userRole);
 
                             // Redirect based on role
                             if (userRole == "Farmer")
-                                return RedirectToAction("FarmerDashboard", "Dashboard");
+                                return RedirectToAction("Index", "Farmer");
                             else if (userRole == "Employee")
-                                return RedirectToAction("EmployeeDashboard", "Dashboard");
+                                return RedirectToAction("Index", "Employee");
                             else
                                 return RedirectToAction("Index", "Home");
                         }

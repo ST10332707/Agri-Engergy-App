@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Employee";
+}
+<h1>@ViewData["Title"]</h1>
+
+<h2>Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
+
+<p>You are successfully logged in.</p>
+
+<!-- Logout Button -->
+<form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
+
