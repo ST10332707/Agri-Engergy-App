@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Agri_Engergy_App.Models.LoginModel
+@{
     ViewData["Title"] = "Login Page";
 }
 
@@ -39,12 +40,17 @@
 
 <div class="login-form">
     <form asp-controller="Login" asp-action="Login" method="post">
-        <input type="text" name="name" placeholder="Name" required />
-        <input type="text" name="email" placeholder="example@gmail.com" required />
-        <button type="submit">Submit</button>
+        <input type="text" name="email" asp-for="UserEmail" placeholder="example@gmail.com" required />
+        <input type="text" name="password" asp-for="Password" placeholder="example@gmail.com" required />
+        <button type="submit">Login</button>
     </form>
 
     <div class="signup-link">
         <p>If you don't have an account <a href="https://localhost:7274/Home/SignUp">Sign Up</a> for a new account.</p>
     </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div style="color: red;">@Html.ValidationSummary(true)</div>
+    }
 </div>

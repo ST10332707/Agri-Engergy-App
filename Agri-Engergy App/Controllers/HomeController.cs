@@ -33,6 +33,13 @@ namespace Agri_Engergy_App.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult SelectRole(string role)
+        {
+            TempData["SelectedRole"] = role; // Store selected role temporarily
+            return RedirectToAction("Login", "Login");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

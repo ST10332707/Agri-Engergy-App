@@ -5,7 +5,7 @@
 <div class="role-selection">
     <p>Select your role to log in:</p>
 
-    <form method="post" action="/Account/Login">
+    <form asp-controller="Home" asp-action="SelectRole" method="post">
         <button type="submit" name="role" value="Farmer" class="btn btn-success btn-block">Login as Farmer</button>
         <button type="submit" name="role" value="Employee" class="btn btn-primary btn-block">Login as Employee</button>
     </form>
