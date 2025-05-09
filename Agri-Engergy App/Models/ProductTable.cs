@@ -1,6 +1,7 @@
 ﻿using Agri_Engergy_App.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.PortableExecutable;
 
 namespace Agri_Engergy_App.Models
 {
@@ -19,10 +20,13 @@ namespace Agri_Engergy_App.Models
         public int ProductPrice { get; set; }
 
         [Required]
-        public string UnitOfMeasurement { get; set; }       
+        public string UnitOfMeasurement { get; set; }
 
         [Required]
         public DateOnly ProductionDate { get; set; }
+
+        [Required]
+        public int UserID { get; set; } // Foreign key to UserTable
 
         private readonly AppDbContext _context = new AppDbContext();
 
@@ -39,25 +43,92 @@ namespace Agri_Engergy_App.Models
                         ProductCategory TEXT NOT NULL,
                         ProductPrice INTEGER NOT NULL,
                         UnitOfMeasurement TEXT NOT NULL,
-                        ProductionDate Date NOT NULL
-                        
+                        ProductionDate Date NOT NULL,
+                        UserID INTEGER NOT NULL                        
                     );";
                 createCmd.ExecuteNonQuery();
 
                 // Insert
                 var cmd = con.CreateCommand();
                 cmd.CommandText = @"
-                    INSERT INTO ProductTable (ProductName, ProductCategory, ProductPrice, UnitOfMeasurement, ProductionDate )
-                    VALUES ($name, $category, $price, $unitOfMeasurement, $date);";
+                    INSERT INTO ProductTable (ProductName, ProductCategory, ProductPrice, UnitOfMeasurement, ProductionDate, UserID)
+                    VALUES ($name, $category, $price, $unitOfMeasurement, $date, $userId);";
 
                 cmd.Parameters.AddWithValue("$name", p.ProductName);
                 cmd.Parameters.AddWithValue("$category", p.ProductCategory);
                 cmd.Parameters.AddWithValue("$price", p.ProductPrice);
                 cmd.Parameters.AddWithValue("$unitOfMeasurement", p.UnitOfMeasurement);
-                cmd.Parameters.AddWithValue("$date", p.ProductionDate.ToString("yyyy-MM-dd"));               
+                cmd.Parameters.AddWithValue("$date", p.ProductionDate.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("$userId", p.UserID);
 
                 return cmd.ExecuteNonQuery();
             }
         }
+
+        public static List<ProductTable> GetAllProducts()
+        {
+            List<ProductTable> products = new List<ProductTable>();
+            var _context = new AppDbContext();
+
+            using (var con = _context.GetConnection())
+            {
+                con.Open();
+                var cmd = con.CreateCommand();
+                cmd.CommandText = "SELECT * FROM ProductTable";
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ProductTable product = new ProductTable
+                        {
+                            ProductID = reader.GetInt32(reader.GetOrdinal("ProductID")),
+                            ProductName = reader.GetString(reader.GetOrdinal("ProductName")),
+                            ProductCategory = reader.GetString(reader.GetOrdinal("ProductCategory")),
+                            ProductPrice = reader.GetInt32(reader.GetOrdinal("ProductPrice")),
+                            UnitOfMeasurement = reader.GetString(reader.GetOrdinal("UnitOfMeasurement")),
+                            ProductionDate = DateOnly.Parse(reader.GetString(reader.GetOrdinal("ProductionDate")))
+                        };
+                        products.Add(product);
+                    }
+                }
+            }
+            return products;
+        }
+
+        public static List<ProductTable> GetProductsByUserId(int userId)
+        {
+            List<ProductTable> products = new List<ProductTable>();
+            var _context = new AppDbContext();
+
+            using (var con = _context.GetConnection())
+            {
+                con.Open();
+                var cmd = con.CreateCommand();
+                cmd.CommandText = @"
+                    SELECT * FROM ProductTable
+                    WHERE UserID = $userId";
+                cmd.Parameters.AddWithValue("$userId", userId);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ProductTable product = new ProductTable
+                        {
+                            ProductID = reader.GetInt32(reader.GetOrdinal("ProductID")),
+                            ProductName = reader.GetString(reader.GetOrdinal("ProductName")),
+                            ProductCategory = reader.GetString(reader.GetOrdinal("ProductCategory")),
+                            ProductPrice = reader.GetInt32(reader.GetOrdinal("ProductPrice")),
+                            UnitOfMeasurement = reader.GetString(reader.GetOrdinal("UnitOfMeasurement")),
+                            ProductionDate = DateOnly.Parse(reader.GetString(reader.GetOrdinal("ProductionDate")))
+                        };
+                        products.Add(product);
+                    }
+                }
+            }
+            return products;
+        }
+
     }
 }

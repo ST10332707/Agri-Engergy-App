@@ -7,7 +7,7 @@ namespace Agri_Engergy_App.Controllers
     {
         public IActionResult Index()
         {
-            // Get the name and surname from session
+            // Get the UserID, name and surname from session
             string userName = HttpContext.Session.GetString("UserName");
             string userSurname = HttpContext.Session.GetString("UserSurname");
 
@@ -21,13 +21,19 @@ namespace Agri_Engergy_App.Controllers
         [HttpPost]
         public IActionResult AddProduct(ProductTable p)
         {
+            int? userId = HttpContext.Session.GetInt32("UserID");
+            if (userId == null)
+                return RedirectToAction("Login", "Login");
+
             if (ModelState.IsValid)
             {
+                p.UserID = userId.Value;
+
                 var result = p.InsertProduct(p);
                 if (result > 0)
                 {
                     TempData["Success"] = "Product added successfully.";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("DisplayProduct");
                 }
                 else
                 {
@@ -42,6 +48,16 @@ namespace Agri_Engergy_App.Controllers
         public IActionResult AddProduct()
         {
             return View(); // This should render Views/Farmer/AddProduct.cshtml
+        }
+
+        public IActionResult DisplayProduct()
+        {
+            int? userId = HttpContext.Session.GetInt32("UserID");
+            if (userId == null)
+                return RedirectToAction("Login", "Login");
+
+            var products = ProductTable.GetProductsByUserId(userId.Value);
+            return View(products);
         }
     }
 }

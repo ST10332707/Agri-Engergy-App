@@ -6,10 +6,18 @@
 
 <p>You are successfully logged in.</p>
 
+<!-- Add Product Button -->
 <form asp-controller="Farmer" asp-action="AddProduct" method="get">
     <button type="submit" class="btn btn-primary">Add New Product</button>
 </form>
 
+<!-- Display Product Button -->
+<form asp-controller="Farmer" asp-action="DisplayProduct" method="get">
+    <button type="submit" class="btn btn-primary">View My Products</button>
+</form>
+
+@* <a asp-controller="Farmer" asp-action="DisplayProduct" class="btn btn-info">View My Products</a>
+ *@
 
 <!-- Logout Button -->
 <form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
