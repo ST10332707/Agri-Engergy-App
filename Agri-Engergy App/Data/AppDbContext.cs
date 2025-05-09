@@ -1,25 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Agri_Engergy_App.Models;
+using Microsoft.Data.Sqlite;
 
 namespace Agri_Engergy_App.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<UserTable> Users { get; set; }
-
-        private readonly string _dbPath;
+        private readonly string _connectionString;
 
         public AppDbContext()
         {
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
-            Directory.CreateDirectory(folderPath); // Ensures folder exists
-            _dbPath = Path.Combine(folderPath, "myDatabase.db");
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+            Directory.CreateDirectory(folderPath); // ensure directory exists
+
+            string dbPath = Path.Combine(folderPath, "AgriDatabase.db");
+            _connectionString = $"Data Source={dbPath}";
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        public SqliteConnection GetConnection()
         {
-            options.UseSqlite($"Data Source={_dbPath}");
+            var connection = new SqliteConnection(_connectionString);
+            connection.Open();
+            return connection;
         }
     }
 }
