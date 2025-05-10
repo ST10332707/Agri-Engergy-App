@@ -7,6 +7,8 @@ namespace Agri_Engergy_App.Controllers
     {
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("UserRole") != "Employee")
+                return Unauthorized();
 
             // Get the name and surname from session
             string userName = HttpContext.Session.GetString("UserName");

@@ -5,21 +5,20 @@
 <h2>Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
 
 <p>You are successfully logged in.</p>
+<div class="d-flex flex-column align-items-center gap-3 mt-4">
 
-<!-- Add Product Button -->
-<form asp-controller="Farmer" asp-action="AddProduct" method="get">
-    <button type="submit" class="btn btn-primary">Add New Product</button>
-</form>
+    <!-- Add Product Button -->
+    <form asp-controller="Farmer" asp-action="AddProduct" method="get">
+        <button type="submit" class="btn btn-primary">Add New Product</button>
+    </form>
 
-<!-- Display Product Button -->
-<form asp-controller="Farmer" asp-action="DisplayProduct" method="get">
-    <button type="submit" class="btn btn-primary">View My Products</button>
-</form>
+    <!-- Display Product Button -->
+    <form asp-controller="Farmer" asp-action="DisplayProduct" method="get">
+        <button type="submit" class="btn btn-primary">View My Products</button>
+    </form>
 
-@* <a asp-controller="Farmer" asp-action="DisplayProduct" class="btn btn-info">View My Products</a>
- *@
-
-<!-- Logout Button -->
-<form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
-    <button type="submit" class="btn btn-danger">Logout</button>
-</form>
+    <!-- Logout Button -->
+    <form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
+        <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+</div>

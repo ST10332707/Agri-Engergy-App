@@ -7,6 +7,9 @@ namespace Agri_Engergy_App.Controllers
     {
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("UserRole") != "Farmer")
+                return Unauthorized();
+
             // Get the UserID, name and surname from session
             string userName = HttpContext.Session.GetString("UserName");
             string userSurname = HttpContext.Session.GetString("UserSurname");
@@ -21,6 +24,9 @@ namespace Agri_Engergy_App.Controllers
         [HttpPost]
         public IActionResult AddProduct(ProductTable p)
         {
+            //if (HttpContext.Session.GetString("UserRole") != "Farmer")
+            //    return Unauthorized();
+
             int? userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
                 return RedirectToAction("Login", "Login");
@@ -47,11 +53,16 @@ namespace Agri_Engergy_App.Controllers
         [HttpGet]
         public IActionResult AddProduct()
         {
+            if (HttpContext.Session.GetString("UserRole") != "Farmer")
+                return Unauthorized();
             return View(); // This should render Views/Farmer/AddProduct.cshtml
         }
 
         public IActionResult DisplayProduct()
         {
+            if (HttpContext.Session.GetString("UserRole") != "Farmer")
+                return Unauthorized();
+
             int? userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
                 return RedirectToAction("Login", "Login");

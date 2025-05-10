@@ -49,6 +49,10 @@
     <button type="submit" class="btn btn-success">Add Product</button>
 </form>
 
+<div class="text-center mt-3">
+    <a asp-controller="Farmer" asp-action="Index" class="btn btn-secondary">Return to Dashboard</a>
+</div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
