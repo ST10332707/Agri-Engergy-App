@@ -130,5 +130,65 @@ namespace Agri_Engergy_App.Models
             return products;
         }
 
+        public static List<FarmerProductGroup> GetAllProductsWithFarmerInfo()
+        {
+            var farmerGroups = new List<FarmerProductGroup>();
+            var _context = new AppDbContext();
+
+            using (var con = _context.GetConnection())
+            {
+                con.Open();
+                var cmd = con.CreateCommand();
+                cmd.CommandText = @"
+                    SELECT u.UserID, u.UserName, u.UserSurname,
+                           p.ProductID, p.ProductName, p.ProductCategory, 
+                           p.ProductPrice, p.UnitOfMeasurement, p.ProductionDate
+                    FROM ProductTable p
+                    JOIN UserTable u ON p.UserID = u.UserID
+                    ORDER BY u.UserID;
+                ";
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    Dictionary<int, FarmerProductGroup> lookup = new Dictionary<int, FarmerProductGroup>();
+
+                    while (reader.Read())
+                    {
+                        int userId = reader.GetInt32(reader.GetOrdinal("UserID"));
+
+                        if (!lookup.ContainsKey(userId))
+                        {
+                            lookup[userId] = new FarmerProductGroup
+                            {
+                                UserID = userId,
+                                FarmerName = reader.GetString(reader.GetOrdinal("UserName")),
+                                FarmerSurname = reader.GetString(reader.GetOrdinal("UserSurname")),
+                                Products = new List<ProductTable>()
+
+                            };
+                        }
+
+                        var product = new ProductTable
+                        {
+                            ProductID = reader.GetInt32(reader.GetOrdinal("ProductID")),
+                            ProductName = reader.GetString(reader.GetOrdinal("ProductName")),
+                            ProductCategory = reader.GetString(reader.GetOrdinal("ProductCategory")),
+                            ProductPrice = reader.GetInt32(reader.GetOrdinal("ProductPrice")),
+                            UnitOfMeasurement = reader.GetString(reader.GetOrdinal("UnitOfMeasurement")),
+                            ProductionDate = DateOnly.Parse(reader.GetString(reader.GetOrdinal("ProductionDate")))
+
+                        };
+
+                        lookup[userId].Products.Add(product);
+                    }
+
+                    farmerGroups = lookup.Values.ToList();
+                }
+            }
+            return farmerGroups;
+        }
+
+
+
     }
 }

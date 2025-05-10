@@ -1,13 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Employee";
 }
-
 <h2>Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
-
 <p>You are successfully logged in.</p>
 
-<!-- Logout Button -->
-<form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
-    <button type="submit" class="btn btn-danger">Logout</button>
-</form>
+<div class="d-flex flex-column align-items-center gap-3 mt-4">
+    <!-- Display Product Button -->
+    <form asp-controller="Employee" asp-action="DisplayProduct" method="get">
+        <button type="submit" class="btn btn-info">View Farmers' Products</button>
+    </form>
+
+    <!-- Logout Button -->
+    <form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
+        <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+</div>
+
 

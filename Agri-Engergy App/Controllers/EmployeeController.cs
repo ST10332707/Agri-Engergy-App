@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Agri_Engergy_App.Models;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace Agri_Engergy_App.Controllers
@@ -20,5 +21,15 @@ namespace Agri_Engergy_App.Controllers
 
             return View();
         }
+
+        public IActionResult DisplayProduct()
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Employee")
+                return Unauthorized();
+
+            var farmerProducts = ProductTable.GetAllProductsWithFarmerInfo();
+            return View(farmerProducts); // Pass grouped data to view
+        }
+
     }
 }
