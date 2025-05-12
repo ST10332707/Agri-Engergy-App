@@ -2,6 +2,7 @@
 using Agri_Engergy_App.Models;
 using Microsoft.AspNetCore.Mvc;
 
+////////////////////////////////////////////////////UNK//////////////////////////////////////////////////////////////////////////
 
 namespace Agri_Engergy_App.Controllers
 {
@@ -28,7 +29,6 @@ namespace Agri_Engergy_App.Controllers
 
         public IActionResult DisplayProduct()
         {
-
             if (HttpContext.Session.GetString("UserRole") != "Employee")
                 return Unauthorized();
 
@@ -41,44 +41,104 @@ namespace Agri_Engergy_App.Controllers
             if (HttpContext.Session.GetString("UserRole") != "Employee")
                 return Unauthorized();
 
-            var shortlistService = new ShortlistService();
-            var shortlisted = shortlistService.GetAllShortlisted();
+            int? employeeId = HttpContext.Session.GetInt32("UserID");
 
-            // If no shortlisted farmers, fetch all farmers (Role = Farmer)
-            if (shortlisted.Count == 0)
+            if (employeeId == null)
+                return RedirectToAction("Login", "Login");
+
+            var shortlisted = new List<ShortlistedFarmer>();
+            using (var con = _context.GetConnection())
             {
-                var farmers = new List<UserModel>();
-                using var con = _context.GetConnection();
+                con.Open();
                 var cmd = con.CreateCommand();
-                cmd.CommandText = "SELECT * FROM UserTable WHERE Role = 'Farmer'";
+                cmd.CommandText = "SELECT * FROM ShortlistedFarmers WHERE EmployeeID = $empId";
+                cmd.Parameters.AddWithValue("$empId", employeeId);
+
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    farmers.Add(new UserModel
+                    shortlisted.Add(new ShortlistedFarmer
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal("ID")),
+                        EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID")),
+                        FarmerUserID = reader.GetInt32(reader.GetOrdinal("FarmerUserID")),
+                        FarmerName = reader.GetString(reader.GetOrdinal("FarmerName")),
+                        FarmerSurname = reader.GetString(reader.GetOrdinal("FarmerSurname"))
+
+                    });
+                }
+            }
+
+            // If empty, fetch all farmers not yet shortlisted
+            if (shortlisted.Count == 0)
+            {
+                var availableFarmers = new List<UserModel>();
+                using var con = _context.GetConnection();
+                var cmd = con.CreateCommand();
+                cmd.CommandText = @"
+                    SELECT * FROM UserTable 
+                    WHERE Role = 'Farmer' AND UserID NOT IN 
+                        (SELECT FarmerUserID FROM ShortlistedFarmers WHERE EmployeeID = $empId)";
+                cmd.Parameters.AddWithValue("$empId", employeeId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    availableFarmers.Add(new UserModel
                     {
                         UserID = reader.GetInt32(reader.GetOrdinal("UserID")),
                         UserName = reader.GetString(reader.GetOrdinal("UserName")),
                         UserSurname = reader.GetString(reader.GetOrdinal("UserSurname")),
+
                     });
                 }
-
-                ViewBag.AvailableFarmers = farmers;
-
+                ViewBag.AvailableFarmers = availableFarmers;
             }
-            return View(shortlisted);
+                return View(shortlisted);
         }
 
         [HttpPost]
         public IActionResult AddToShortlist(int farmerUserId, string farmerName, string farmerSurname)
         {
             if (HttpContext.Session.GetString("UserRole") != "Employee")
-                return Unauthorized();
+               return Unauthorized();
 
-            int employeeId = HttpContext.Session.GetInt32("UserID") ?? 0;
-            var service = new ShortlistService();
-            service.AddToShortlist(employeeId, farmerUserId, farmerName, farmerSurname);
-            return RedirectToAction("ShortlistedFarmers");
+            int? employeeId = HttpContext.Session.GetInt32("UserID");
+
+            if (employeeId == null)
+                return RedirectToAction("Login", "Login");
+
+            using (var con = _context.GetConnection())
+            {
+                con.Open();
+
+                // Check if already shortlisted
+                var checkCmd = con.CreateCommand();
+                checkCmd.CommandText = @"
+                         SELECT COUNT(*) FROM ShortlistedFarmers 
+                         WHERE EmployeeID = $empId AND FarmerUserID = $farmerId";
+                checkCmd.Parameters.AddWithValue("$empId", employeeId);
+                checkCmd.Parameters.AddWithValue("$farmerId", farmerUserId);
+
+                var exists = Convert.ToInt32(checkCmd.ExecuteScalar()) > 0;
+                if (!exists)
+                {
+                    var cmd = con.CreateCommand();
+                    cmd.CommandText = @"
+                        INSERT INTO ShortlistedFarmers (EmployeeID, FarmerUserID, FarmerName, FarmerSurname)
+                        VALUES ($empId, $farmerId, $name, $surname)";
+                    cmd.Parameters.AddWithValue("$empId", employeeId);
+                    cmd.Parameters.AddWithValue("$farmerId", farmerUserId);
+                    cmd.Parameters.AddWithValue("$name", farmerName);
+                    cmd.Parameters.AddWithValue("$surname", farmerSurname);
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+                return RedirectToAction("ShortlistedFarmers");
         }
+
+
 
     }
 }
+////////////////////////////////////////////////////UNK//////////////////////////////////////////////////////////////////////////

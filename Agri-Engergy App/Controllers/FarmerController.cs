@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Agri_Engergy_App.Models;
 
+////////////////////////////////////////////////////UNK//////////////////////////////////////////////////////////////////////////
+
 namespace Agri_Engergy_App.Controllers
 {
     public class FarmerController : Controller
@@ -24,8 +26,8 @@ namespace Agri_Engergy_App.Controllers
         [HttpPost]
         public IActionResult AddProduct(ProductTable p)
         {
-            //if (HttpContext.Session.GetString("UserRole") != "Farmer")
-            //    return Unauthorized();
+            if (HttpContext.Session.GetString("UserRole") != "Farmer")
+                return Unauthorized();
 
             int? userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
@@ -72,3 +74,4 @@ namespace Agri_Engergy_App.Controllers
         }
     }
 }
+////////////////////////////////////////////////////UNK//////////////////////////////////////////////////////////////////////////
