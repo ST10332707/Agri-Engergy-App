@@ -1,5 +1,4 @@
-﻿@* @model List<Agri_Engergy_App.Models.FarmerProductGroup> *@
-@model List<Agri_Engergy_App.Models.FarmerProductGroup>
+﻿@model List<Agri_Engergy_App.Models.FarmerProductGroup>
 
 @{
     ViewData["Title"] = "Farmer Products";
@@ -34,6 +33,14 @@
         </tbody>
     </table>
 }
+
+@* <form asp-action="AddToShortlist" method="post">
+    <input type="hidden" name="farmerUserId" value="@Farmer.UserID" />
+    <input type="hidden" name="farmerName" value="@farmer.UserName" />
+    <input type="hidden" name="farmerSurname" value="@farmer.UserSurname" />
+    <button type="submit" class="btn btn-warning">Shortlist</button>
+</form> *@
+
 <div class="text-center mt-3">
     <a asp-controller="Employee" asp-action="Index" class="btn btn-secondary">Return to Dashboard</a>
 </div>

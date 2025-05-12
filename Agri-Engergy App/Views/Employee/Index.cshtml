@@ -10,6 +10,10 @@
         <button type="submit" class="btn btn-info">View Farmers' Products</button>
     </form>
 
+    <form asp-controller="Employee" asp-action="ShortlistedFarmers" method="get">
+        <button type="submit" class="btn btn-info">Go to Shortlisted Farmers</button>
+    </form>
+
     <!-- Logout Button -->
     <form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
         <button type="submit" class="btn btn-danger">Logout</button>
