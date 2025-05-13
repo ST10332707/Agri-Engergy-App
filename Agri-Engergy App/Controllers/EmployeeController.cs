@@ -70,10 +70,11 @@ namespace Agri_Engergy_App.Controllers
             }
 
             // If empty, fetch all farmers not yet shortlisted
-            if (shortlisted.Count == 0)
+            if (shortlisted.Count < 10) ////< 10
             {
                 var availableFarmers = new List<UserModel>();
                 using var con = _context.GetConnection();
+                con.Open(); //////
                 var cmd = con.CreateCommand();
                 cmd.CommandText = @"
                     SELECT * FROM UserTable 
@@ -111,6 +112,20 @@ namespace Agri_Engergy_App.Controllers
             {
                 con.Open();
 
+
+                // Count how many Farmers are already shortlisted
+                var countCmd = con.CreateCommand();
+                countCmd.CommandText = "SELECT COUNT(*) FROM ShortlistedFarmers WHERE EmployeeID = $empId";
+                countCmd.Parameters.AddWithValue("$empId", employeeId);
+                int count = Convert.ToInt32(countCmd.ExecuteScalar());
+
+                //ensure that 10 or less Farmer can be shortlisted
+                if (count >= 10)
+                {
+                    TempData["Error"] = "You can only shortlist up to 10 farmers.";
+                    return RedirectToAction("ShortlistedFarmers");
+                }
+
                 // Check if already shortlisted
                 var checkCmd = con.CreateCommand();
                 checkCmd.CommandText = @"
@@ -118,6 +133,9 @@ namespace Agri_Engergy_App.Controllers
                          WHERE EmployeeID = $empId AND FarmerUserID = $farmerId";
                 checkCmd.Parameters.AddWithValue("$empId", employeeId);
                 checkCmd.Parameters.AddWithValue("$farmerId", farmerUserId);
+
+                
+
 
                 var exists = Convert.ToInt32(checkCmd.ExecuteScalar()) > 0;
                 if (!exists)
