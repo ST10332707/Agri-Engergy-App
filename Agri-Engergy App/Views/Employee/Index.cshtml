@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Employee";
 }
-<h2 style="color: #000000;">Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
+@* <h2 style="color: #000000;">Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
 
 <div class="d-flex flex-column align-items-center gap-3 mt-4">
     <!-- Display Product Button -->
@@ -24,5 +24,84 @@
         background-color: #6c757d;color: #ffffff;
         color: #f0f0f0; /* Light gray text */
         font-family: Arial, sans-serif;
+    }
+</style> *@
+
+
+<div class="employee-container">
+    <div class="overlay-content">
+        <h2>Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
+
+        <form asp-controller="Employee" asp-action="DisplayProduct" method="get">
+            <button type="submit" class="btn btn-info mb-3">View Farmers' Products</button>
+        </form>
+
+        <form asp-controller="Employee" asp-action="ShortlistedFarmers" method="get">
+            <button type="submit" class="btn btn-info mb-3">Go to Shortlisted Farmers</button>
+        </form>
+
+        <form asp-controller="Home" asp-action="Logout" method="post">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+    }
+
+    .employee-container {
+        background-image: url('/images/farm2.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .overlay-content {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 40px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 600px;
+    }
+
+    .overlay-content h2 {
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+    }
+
+    .overlay-content form button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 6px;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        border: none;
+    }
+
+    .btn-info:hover {
+        background-color: #138496;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
     }
 </style>

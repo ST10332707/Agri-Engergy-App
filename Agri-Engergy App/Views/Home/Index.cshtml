@@ -2,33 +2,66 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="role-selection">
-    <p>Select your role to log in:</p>
+<div class="home-container">
+    <div class="overlay-content">
+        <h1>Welcome to Agri_Energy_App</h1>
+        <p>
+            Empowering sustainable agriculture through technology.<br />
+            ✔ Connects farmers and employees for seamless collaboration.<br />
+            ✔ View and manage products in real-time.<br />
+            ✔ Built with simplicity, accessibility, and impact in mind!!
+        </p>
 
-    <form asp-controller="Home" asp-action="SelectRole" method="post">
-        <button type="submit" name="role" value="Farmer" class="btn btn-success btn-block">Login as Farmer</button>
-        <button type="submit" name="role" value="Employee" class="btn btn-primary btn-block">Login as Employee</button>
-    </form>
+        <form asp-controller="Login" asp-action="Login" method="get">
+            <button type="submit" class="btn btn-success login-btn">Login</button>
+        </form>
+    </div>
 </div>
 
 <style>
-    .role-selection {
-        margin-top: 50px;
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+    }
+
+    .home-container {
+        background-image: url('/images/farmer1.webp');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
+        color: #ffffff;
+        position: relative;
     }
 
-    .role-selection form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+    .overlay-content {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 40px;
+        border-radius: 10px;
+        max-width: 700px;
+        width: 90%;
     }
 
-    .role-selection button {
-            width: 90%;
-            max-width: 400px;
-            margin: 10px auto;
-            padding: 12px;
-            font-size: 16px;
-            display: block;
+        .overlay-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .overlay-content p {
+            font-size: 1.25rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+    .login-btn {
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 8px;
     }
 </style>

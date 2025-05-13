@@ -2,7 +2,7 @@
     ViewData["Title"] = "Farmer";
 }
 
-<style>
+@* <style>
     /* Black background and light text  */
     body {
         background-color: #6c757d;
@@ -30,4 +30,82 @@
     <form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
         <button type="submit" class="btn btn-danger">Logout</button>
     </form>
+</div> *@
+
+<div class="farmer-container">
+    <div class="overlay-content">
+        <h2>Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
+
+        <form asp-controller="Farmer" asp-action="AddProduct" method="get">
+            <button type="submit" class="btn btn-primary mb-3">Add New Product</button>
+        </form>
+
+        <form asp-controller="Farmer" asp-action="DisplayProduct" method="get">
+            <button type="submit" class="btn btn-primary mb-3">View My Products</button>
+        </form>
+
+        <form asp-controller="Home" asp-action="Logout" method="post">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
 </div>
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+    }
+
+    .farmer-container {
+        background-image: url('/images/farmer4.jpeg'); /* Change path if needed */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .overlay-content {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 40px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 600px;
+    }
+
+    .overlay-content h2 {
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+    }
+
+    .overlay-content form button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 6px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+</style>
