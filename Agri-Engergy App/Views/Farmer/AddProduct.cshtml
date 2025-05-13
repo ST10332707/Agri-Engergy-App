@@ -3,7 +3,17 @@
     ViewData["Title"] = "Add Product";
 }
 
-<h2>Add New Product</h2>
+<style>
+    /* Black background and light text  */
+    body {
+        background-color: #6c757d;
+        color: #ffffff;
+        color: #f0f0f0; /* Light gray text */
+        font-family: Arial, sans-serif;
+    }
+</style>
+
+<h2 style="color: #000000;">Add New Product</h2>
 
 <form asp-action="AddProduct" asp-controller="Farmer" method="post">
     <div class="form-group">
@@ -50,7 +60,7 @@
 </form>
 
 <div class="text-center mt-3">
-    <a asp-controller="Farmer" asp-action="Index" class="btn btn-secondary">Return to Dashboard</a>
+    <a asp-controller="Farmer" asp-action="Index" class="btn btn-success">Return to Dashboard</a>
 </div>
 
 @section Scripts {

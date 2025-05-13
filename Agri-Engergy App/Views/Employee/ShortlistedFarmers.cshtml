@@ -1,111 +1,22 @@
-﻿@* @model List<Agri_Engergy_App.Models.ShortlistedFarmer>
-
+﻿@model List<Agri_Engergy_App.Models.ShortlistedFarmer>
 @using Agri_Engergy_App.Models
 
 @{
     ViewData["Title"] = "Shortlisted Farmers";
     var availableFarmers = ViewBag.AvailableFarmers as List<UserModel>;
-} *@
-
-@* <h2>Shortlisted Farmers</h2>
-
-@if (Model.Count == 0 && availableFarmers != null)
-{
-    <p>No farmers have been shortlisted yet.</p>
-    <h4>Available Farmers</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var farmer in availableFarmers)
-            {
-                <tr>
-                    <td>@farmer.UserName</td>
-                    <td>@farmer.UserSurname</td>
-                    <td>
-                        <form asp-action="AddToShortlist" method="post">
-                            <input type="hidden" name="farmerUserId" value="@farmer.UserID" />
-                            <input type="hidden" name="farmerName" value="@farmer.UserName" />
-                            <input type="hidden" name="farmerSurname" value="@farmer.UserSurname" />
-                            <button type="submit" class="btn btn-success">Shortlist</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 }
-else
-{
-    @foreach (var farmer in Model)
-    {
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">@farmer.FarmerName @farmer.FarmerSurname</h5>
 
-                <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#products-@farmer.FarmerUserID">
-                    View Products
-                </button>
-
-                <div class="collapse mt-2" id="products-@farmer.FarmerUserID">
-                    @{
-                        var products = ProductTable.GetProductsByUserId(farmer.FarmerUserID);
-                    }
-
-                    @if (products.Count > 0)
-                    {
-                        <table class="table table-striped mt-2">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Unit</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var product in products)
-                                {
-                                    <tr>
-                                        <td>@product.ProductName</td>
-                                        <td>@product.ProductCategory</td>
-                                        <td>@product.ProductPrice</td>
-                                        <td>@product.UnitOfMeasurement</td>
-                                        <td>@product.ProductionDate</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    else
-                    {
-                        <p>No products found for this farmer.</p>
-                    }
-                </div>
-            </div>
-        </div>
+<style>
+    /* Black background and light text  */
+    body {
+        background-color: #6c757d;
+        color: #ffffff;
+        color: #f0f0f0; /* Light gray text */
+        font-family: Arial, sans-serif;
     }
-} *@
-@* 
-<div class="text-center mt-3">
-    <a asp-controller="Employee" asp-action="Index" class="btn btn-secondary">Return to Dashboard</a>
-</div> *@
+</style>
 
-@model List<Agri_Engergy_App.Models.ShortlistedFarmer>
-@using Agri_Engergy_App.Models
-
-@{
-    ViewData["Title"] = "Shortlisted Farmers";
-    var availableFarmers = ViewBag.AvailableFarmers as List<UserModel>;
-}
-
-<h2>Shortlisted Farmers</h2>
+<h2 style="color: #000000;">Shortlisted Farmers</h2>
 
 @if (TempData["Error"] != null)
 {
@@ -118,7 +29,7 @@ else
     {
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title">@farmer.FarmerName @farmer.FarmerSurname</h5>
+                <h5 class="card-title" style="color: #000000;">@farmer.FarmerName @farmer.FarmerSurname</h5>
 
                 <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#products-@farmer.FarmerUserID">
                     View Products
@@ -204,5 +115,5 @@ else if (Model.Count >= 10)
     <p class="text-warning">You have already shortlisted 10 farmers. You cannot add more.</p>
 }
 <div class="text-center mt-3">
-    <a asp-controller="Employee" asp-action="Index" class="btn btn-secondary">Return to Dashboard</a>
+    <a asp-controller="Employee" asp-action="Index" class="btn btn-success">Return to Dashboard</a>
 </div>

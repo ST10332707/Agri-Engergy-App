@@ -5,6 +5,14 @@
 }
 
 <style>
+
+    /* Black background and light text  */
+    body {
+        background-color: #6c757d;color: #ffffff;
+        color: #f0f0f0; /* Light gray text */
+        font-family: Arial, sans-serif;
+    }
+
     .signup-form {
         display: flex;
         flex-direction: column;
@@ -28,7 +36,7 @@
 
 <div class="signup-form">
     <form asp-controller="SignUp" asp-action="SignUp" method="post">
-        <h2>Create Profile:</h2>
+        <h2 style="color: #000000;">Create Profile:</h2>
 
         <input type="text" name="UserName" placeholder="Name" required />
         <input type="text" name="UserSurname" placeholder="Surname" required />
@@ -47,5 +55,5 @@
 </div>
 
 <div class="text-center mt-3">
-    <a asp-controller="Login" asp-action="Login" class="btn btn-secondary">Return to Login</a>
+    <a asp-controller="Login" asp-action="Login" class="btn btn-success">Return to Login</a>
 </div>

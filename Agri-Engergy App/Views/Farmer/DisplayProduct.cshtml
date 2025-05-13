@@ -4,7 +4,17 @@
     ViewData["Title"] = "My Products";
 }
 
-<h2>My Products</h2>
+<style>
+    /* Black background and light text  */
+    body {
+        background-color: #6c757d;
+        color: #ffffff;
+        color: #f0f0f0; /* Light gray text */
+        font-family: Arial, sans-serif;
+    }
+</style>
+
+<h2 style="color: #000000;">My Products</h2>
 
 <table class="table table-bordered">
     <thead>
@@ -31,5 +41,5 @@
 </table>
 
 <div class="text-center mt-3">
-    <a asp-controller="Farmer" asp-action="Index" class="btn btn-secondary">Return to Dashboard</a>
+    <a asp-controller="Farmer" asp-action="Index" class="btn btn-success">Return to Dashboard</a>
 </div>

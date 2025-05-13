@@ -4,11 +4,21 @@
     ViewData["Title"] = "Farmer Products";
 }
 
-<h2>All Farmers' Products</h2>
+<h2 style="color: #000000;">All Farmers' Products</h2>
+
+<style>
+    /* Black background and light text  */
+    body {
+        background-color: #6c757d;
+        color: #ffffff;
+        color: #f0f0f0; /* Light gray text */
+        font-family: Arial, sans-serif;
+    }
+</style>
 
 @foreach (var group in Model)
 {
-    <h4>@group.FarmerName @group.FarmerSurname</h4>
+    <h4 style="color: #000000;">@group.FarmerName @group.FarmerSurname</h4>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -34,13 +44,6 @@
     </table>
 }
 
-@* <form asp-action="AddToShortlist" method="post">
-    <input type="hidden" name="farmerUserId" value="@Farmer.UserID" />
-    <input type="hidden" name="farmerName" value="@farmer.UserName" />
-    <input type="hidden" name="farmerSurname" value="@farmer.UserSurname" />
-    <button type="submit" class="btn btn-warning">Shortlist</button>
-</form> *@
-
 <div class="text-center mt-3">
-    <a asp-controller="Employee" asp-action="Index" class="btn btn-secondary">Return to Dashboard</a>
+    <a asp-controller="Employee" asp-action="Index" class="btn btn-success">Return to Dashboard</a>
 </div>
