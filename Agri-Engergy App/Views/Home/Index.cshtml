@@ -2,9 +2,11 @@
     ViewData["Title"] = "Home Page";
 }
 
+<!-- Background container -->
 <div class="home-container">
     <div class="overlay-content">
         <h1>Welcome to Agri_Energy_App</h1>
+        <!-- App Description -->
         <p>
             Empowering sustainable agriculture through technology.<br />
             ✔ Connects farmers and employees for seamless collaboration.<br />
@@ -12,12 +14,14 @@
             ✔ Built with simplicity, accessibility, and impact in mind!!
         </p>
 
+        <!-- Button to navigate to login page -->
         <form asp-controller="Login" asp-action="Login" method="get">
             <button type="submit" class="btn btn-success login-btn">Login</button>
         </form>
     </div>
 </div>
 
+<!-- Page styling -->
 <style>
     body, html {
         margin: 0;
@@ -48,16 +52,16 @@
         width: 90%;
     }
 
-        .overlay-content h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
+     .overlay-content h1 {
+         font-size: 3rem;
+         margin-bottom: 20px;
+     }
 
-        .overlay-content p {
-            font-size: 1.25rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
+     .overlay-content p {
+         font-size: 1.25rem;
+         margin-bottom: 30px;
+         line-height: 1.6;
+     }
 
     .login-btn {
         padding: 15px 30px;

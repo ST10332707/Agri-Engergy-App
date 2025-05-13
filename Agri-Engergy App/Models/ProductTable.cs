@@ -8,7 +8,7 @@ namespace Agri_Engergy_App.Models
     public class ProductTable
     {
         [Key]
-        public int ProductID { get; set; }
+        public int ProductID { get; set; } // Unique ID for each product
 
         [Required]
         public string ProductName { get; set; }
@@ -26,10 +26,11 @@ namespace Agri_Engergy_App.Models
         public DateOnly ProductionDate { get; set; }
 
         [Required]
-        public int UserID { get; set; } // Foreign key to UserTable
+        public int UserID { get; set; } //Foreign key to identify the farmer (UserTable)
 
         private readonly AppDbContext _context = new AppDbContext();
 
+        // Inserts a product into the database
         public int InsertProduct(ProductTable p)
         {
             using (var con = _context.GetConnection())
@@ -48,12 +49,13 @@ namespace Agri_Engergy_App.Models
                     );";
                 createCmd.ExecuteNonQuery();
 
-                // Insert
+                // Insert product data
                 var cmd = con.CreateCommand();
                 cmd.CommandText = @"
                     INSERT INTO ProductTable (ProductName, ProductCategory, ProductPrice, UnitOfMeasurement, ProductionDate, UserID)
                     VALUES ($name, $category, $price, $unitOfMeasurement, $date, $userId);";
 
+                // Parameter assignment for SQL injection prevention
                 cmd.Parameters.AddWithValue("$name", p.ProductName);
                 cmd.Parameters.AddWithValue("$category", p.ProductCategory);
                 cmd.Parameters.AddWithValue("$price", p.ProductPrice);
@@ -65,6 +67,7 @@ namespace Agri_Engergy_App.Models
             }
         }
 
+        //Get all products from database
         public static List<ProductTable> GetAllProducts()
         {
             List<ProductTable> products = new List<ProductTable>();
@@ -96,6 +99,7 @@ namespace Agri_Engergy_App.Models
             return products;
         }
 
+        // Retrieves products specific to a given user (Farmer) using userId
         public static List<ProductTable> GetProductsByUserId(int userId)
         {
             List<ProductTable> products = new List<ProductTable>();
@@ -130,6 +134,7 @@ namespace Agri_Engergy_App.Models
             return products;
         }
 
+        // Retrieves all products grouped by farmer info
         public static List<FarmerProductGroup> GetAllProductsWithFarmerInfo()
         {
             var farmerGroups = new List<FarmerProductGroup>();
@@ -150,6 +155,7 @@ namespace Agri_Engergy_App.Models
 
                 using (var reader = cmd.ExecuteReader())
                 {
+                    // Dictionary for grouping products by farmer
                     Dictionary<int, FarmerProductGroup> lookup = new Dictionary<int, FarmerProductGroup>();
 
                     while (reader.Read())
@@ -168,6 +174,7 @@ namespace Agri_Engergy_App.Models
                             };
                         }
 
+                        //Add products to that farmers group
                         var product = new ProductTable
                         {
                             ProductID = reader.GetInt32(reader.GetOrdinal("ProductID")),

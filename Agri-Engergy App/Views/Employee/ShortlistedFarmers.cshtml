@@ -6,23 +6,25 @@
     var availableFarmers = ViewBag.AvailableFarmers as List<UserModel>;
 }
 
-<style>
-    /* Black background and light text  */
+<!-- Page styling for background and font -->
+<style>   
     body {
         background-color: #6c757d;
         color: #ffffff;
-        color: #f0f0f0; /* Light gray text */
+        color: #f0f0f0; 
         font-family: Arial, sans-serif;
     }
 </style>
 
 <h2 style="color: #000000;">Shortlisted Farmers</h2>
 
+<!-- Show error message if any -->
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
 
+<!-- Display each shortlisted farmer -->
 @if (Model.Count > 0)
 {
     foreach (var farmer in Model)
@@ -31,15 +33,18 @@
             <div class="card-body">
                 <h5 class="card-title" style="color: #000000;">@farmer.FarmerName @farmer.FarmerSurname</h5>
 
+                <!-- Button to toggle viewing this farmer's products -->
                 <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#products-@farmer.FarmerUserID">
                     View Products
                 </button>
 
+                <!-- Collapsible section for displaying farmer's products -->
                 <div class="collapse mt-2" id="products-@farmer.FarmerUserID">
                     @{
                         var products = ProductTable.GetProductsByUserId(farmer.FarmerUserID);
                     }
 
+                    <!-- Check if any products were found -->
                     @if (products.Count > 0)
                     {
                         <table class="table table-striped mt-2">
@@ -68,7 +73,7 @@
                     }
                     else
                     {
-                        <p>No products found for this farmer.</p>
+                        <p>No products found for this farmer.</p> <!-- Message shown when farmer has no products -->
                     }
                 </div>
             </div>
@@ -77,9 +82,10 @@
 }
 else
 {
-    <p>No farmers have been shortlisted yet.</p>
+    <p>No farmers have been shortlisted yet.</p> <!-- Message shown if no farmers have been shortlisted yet -->
 }
 
+<!-- Display table of available farmers only if fewer than 10 farmers -->
 @if (availableFarmers != null && availableFarmers.Count > 0 && Model.Count < 10)
 {
     <h4>Available Farmers</h4>
@@ -92,6 +98,7 @@ else
             </tr>
         </thead>
         <tbody>
+            <!-- Display List of each available farmer with a button to shortlist them -->
             @foreach (var farmer in availableFarmers)
             {
                 <tr>
@@ -112,8 +119,11 @@ else
 }
 else if (Model.Count >= 10)
 {
+    <!-- Message shown when user has reached max number of shortlisted farmers -->
     <p class="text-warning">You have already shortlisted 10 farmers. You cannot add more.</p>
 }
+
+<!-- Button to return to the Employee Dashboard (Employee/Index) -->
 <div class="text-center mt-3">
     <a asp-controller="Employee" asp-action="Index" class="btn btn-success">Return to Dashboard</a>
 </div>

@@ -9,10 +9,12 @@ namespace Agri_Engergy_App.Controllers
     public class EmployeeController : Controller
     {
 
-        private readonly AppDbContext _context = new AppDbContext();
+        private readonly AppDbContext _context = new AppDbContext();// Database context for database operations
 
+        // Landing page for Employee users
         public IActionResult Index()
         {
+            //Verify that user is an employee
             if (HttpContext.Session.GetString("UserRole") != "Employee")
                 return Unauthorized();
 
@@ -20,15 +22,17 @@ namespace Agri_Engergy_App.Controllers
             string userName = HttpContext.Session.GetString("UserName");
             string userSurname = HttpContext.Session.GetString("UserSurname");
 
-            // You can pass it to the view using ViewBag or ViewData
+            // Send user name and surname to the view
             ViewBag.UserName = userName;
             ViewBag.UserSurname = userSurname;
 
             return View();
         }
 
+        // Display all farmer products
         public IActionResult DisplayProduct()
         {
+            //Verify that user is an employee
             if (HttpContext.Session.GetString("UserRole") != "Employee")
                 return Unauthorized();
 
@@ -36,16 +40,20 @@ namespace Agri_Engergy_App.Controllers
             return View(farmerProducts); // Pass grouped data to view
         }
 
+        // Display the list of shortlisted farmers (max 10) for specific employee
         public IActionResult ShortlistedFarmers()
         {
+            //Verify that user is an employee
             if (HttpContext.Session.GetString("UserRole") != "Employee")
                 return Unauthorized();
 
+            // Get employee ID from session
             int? employeeId = HttpContext.Session.GetInt32("UserID");
 
             if (employeeId == null)
                 return RedirectToAction("Login", "Login");
 
+            // Retrieve existing shortlisted farmers for this employee
             var shortlisted = new List<ShortlistedFarmer>();
             using (var con = _context.GetConnection())
             {
@@ -69,7 +77,7 @@ namespace Agri_Engergy_App.Controllers
                 }
             }
 
-            // If empty, fetch all farmers not yet shortlisted
+            // If fewer than 10 shortlisted, fetch available farmers not already shortlisted
             if (shortlisted.Count < 10) ////< 10
             {
                 var availableFarmers = new List<UserModel>();
@@ -97,12 +105,15 @@ namespace Agri_Engergy_App.Controllers
                 return View(shortlisted);
         }
 
+        // POST: Add a farmer to the current employee's shortlist
         [HttpPost]
         public IActionResult AddToShortlist(int farmerUserId, string farmerName, string farmerSurname)
         {
+            //Verify that user is an employee
             if (HttpContext.Session.GetString("UserRole") != "Employee")
                return Unauthorized();
 
+            // Get employee ID from session
             int? employeeId = HttpContext.Session.GetInt32("UserID");
 
             if (employeeId == null)
@@ -111,7 +122,6 @@ namespace Agri_Engergy_App.Controllers
             using (var con = _context.GetConnection())
             {
                 con.Open();
-
 
                 // Count how many Farmers are already shortlisted
                 var countCmd = con.CreateCommand();
@@ -132,10 +142,7 @@ namespace Agri_Engergy_App.Controllers
                          SELECT COUNT(*) FROM ShortlistedFarmers 
                          WHERE EmployeeID = $empId AND FarmerUserID = $farmerId";
                 checkCmd.Parameters.AddWithValue("$empId", employeeId);
-                checkCmd.Parameters.AddWithValue("$farmerId", farmerUserId);
-
-                
-
+                checkCmd.Parameters.AddWithValue("$farmerId", farmerUserId);               
 
                 var exists = Convert.ToInt32(checkCmd.ExecuteScalar()) > 0;
                 if (!exists)
@@ -154,8 +161,6 @@ namespace Agri_Engergy_App.Controllers
             }
                 return RedirectToAction("ShortlistedFarmers");
         }
-
-
 
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Agri_Engergy_App.Models
 {
+    // Model representing a farmer shortlisted by an employee
     public class ShortlistedFarmer
     {
         [Key]

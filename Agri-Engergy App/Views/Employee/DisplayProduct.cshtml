@@ -4,18 +4,20 @@
     ViewData["Title"] = "Farmer Products";
 }
 
-<h2 style="color: #000000;">All Farmers' Products</h2>
+<h2 style="color: #000000;">All Farmers' Products</h2> <!-- Page heading -->
 
+<!-- Page styles for background and font -->
 <style>
-    /* Black background and light text  */
+    
     body {
         background-color: #6c757d;
         color: #ffffff;
-        color: #f0f0f0; /* Light gray text */
+        color: #f0f0f0;
         font-family: Arial, sans-serif;
     }
 </style>
 
+<!-- foreach Loop to loop through each farmer group to display their products -->
 @foreach (var group in Model)
 {
     <h4 style="color: #000000;">@group.FarmerName @group.FarmerSurname</h4>
@@ -30,6 +32,8 @@
             </tr>
         </thead>
         <tbody>
+
+            <!-- foreach Loop to loop through products for this farmer -->
             @foreach (var product in group.Products)
             {
                 <tr>
@@ -44,6 +48,7 @@
     </table>
 }
 
+<!-- Button to return to the employee dashboard (Employee/Index) -->
 <div class="text-center mt-3">
     <a asp-controller="Employee" asp-action="Index" class="btn btn-success">Return to Dashboard</a>
 </div>

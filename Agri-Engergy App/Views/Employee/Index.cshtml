@@ -1,51 +1,30 @@
 ﻿@{
     ViewData["Title"] = "Employee";
 }
-@* <h2 style="color: #000000;">Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
 
-<div class="d-flex flex-column align-items-center gap-3 mt-4">
-    <!-- Display Product Button -->
-    <form asp-controller="Employee" asp-action="DisplayProduct" method="get">
-        <button type="submit" class="btn btn-info">View Farmers' Products</button>
-    </form>
-
-    <form asp-controller="Employee" asp-action="ShortlistedFarmers" method="get">
-        <button type="submit" class="btn btn-info">Go to Shortlisted Farmers</button>
-    </form>
-
-    <!-- Logout Button -->
-    <form asp-controller="Home" asp-action="Logout" method="post" style="margin-top: 20px;">
-        <button type="submit" class="btn btn-danger">Logout</button>
-    </form>
-</div>
-
-<style>
-    body {
-        background-color: #6c757d;color: #ffffff;
-        color: #f0f0f0; /* Light gray text */
-        font-family: Arial, sans-serif;
-    }
-</style> *@
-
-
+<!-- Main container with background image -->
 <div class="employee-container">
     <div class="overlay-content">
         <h2>Welcome @ViewBag.UserName @ViewBag.UserSurname!</h2>
 
+        <!-- Display products button -->
         <form asp-controller="Employee" asp-action="DisplayProduct" method="get">
             <button type="submit" class="btn btn-info mb-3">View Farmers' Products</button>
         </form>
 
+        <!-- Go to shortlistlistedFarmers button -->
         <form asp-controller="Employee" asp-action="ShortlistedFarmers" method="get">
             <button type="submit" class="btn btn-info mb-3">Go to Shortlisted Farmers</button>
         </form>
 
+        <!-- Logout button -->
         <form asp-controller="Home" asp-action="Logout" method="post">
             <button type="submit" class="btn btn-danger">Logout</button>
         </form>
     </div>
 </div>
 
+<!-- Page styling -->
 <style>
     body, html {
         margin: 0;

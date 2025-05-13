@@ -4,18 +4,19 @@
     ViewData["Title"] = "My Products";
 }
 
-<style>
-    /* Black background and light text  */
+<!-- Page styling: sets a dark background with light text -->
+<style>   
     body {
         background-color: #6c757d;
         color: #ffffff;
-        color: #f0f0f0; /* Light gray text */
+        color: #f0f0f0;
         font-family: Arial, sans-serif;
     }
 </style>
 
 <h2 style="color: #000000;">My Products</h2>
 
+<!-- Table to display all products added by this farmer -->
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -40,6 +41,7 @@
     </tbody>
 </table>
 
+<!-- Button to navigate to the Farmer dashboard (Farmer/Index) -->
 <div class="text-center mt-3">
     <a asp-controller="Farmer" asp-action="Index" class="btn btn-success">Return to Dashboard</a>
 </div>

@@ -4,12 +4,11 @@
     ViewData["Title"] = "Sign Up";
 }
 
-<style>
-
-    /* Black background and light text  */
+<!-- Page styling for background, font, and form layout -->
+<style>   
     body {
         background-color: #6c757d;color: #ffffff;
-        color: #f0f0f0; /* Light gray text */
+        color: #f0f0f0; 
         font-family: Arial, sans-serif;
     }
 
@@ -34,26 +33,31 @@
     }
 </style>
 
+<!-- Signup form container -->
 <div class="signup-form">
     <form asp-controller="SignUp" asp-action="SignUp" method="post">
         <h2 style="color: #000000;">Create Profile:</h2>
 
+        <!-- Input for user's first name, surname and email -->
         <input type="text" name="UserName" placeholder="Name" required />
         <input type="text" name="UserSurname" placeholder="Surname" required />
         <input type="text" name="UserEmail" placeholder="example@gmail.com" required />
 
+        <!-- Dropdown to select the role -->
         <select name="Role" required>
             <option value="">-- Select Role --</option>
             <option value="Farmer">Farmer</option>
             <option value="Employee">Employee</option>
         </select>
 
+        <!-- Password field -->
         <input asp-for="Password" type="password" placeholder="Create Password" required />
 
-        <button type="submit">Submit</button>
+        <button type="submit">Submit</button> <!-- Submit button -->
     </form>
 </div>
 
+<!-- Button to navigate to login page (Login/Login)-->
 <div class="text-center mt-3">
     <a asp-controller="Login" asp-action="Login" class="btn btn-success">Return to Login</a>
 </div>

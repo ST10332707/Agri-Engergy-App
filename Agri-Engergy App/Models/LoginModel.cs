@@ -13,7 +13,7 @@ namespace Agri_Engergy_App.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string Role { get; set; } //for role-based login
+        public string Role { get; set; } //for role-based login (Employee or Farmer)
 
     }
 }

@@ -4,11 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Agri_Engergy_App.Models
 {
+    // Main user entity class that maps to the UserTable in the database
     public class UserTable
-    {
-        
+    {        
         [Key]
-        public int UserID { get; set; }
+        public int UserID { get; set; } // Primary key for the user table
+
 
         [Required]
         public string UserName { get; set; }
@@ -25,8 +26,10 @@ namespace Agri_Engergy_App.Models
         [Required]
         public string Role { get; set; }
 
+        // Local database context for performing DB operations
         private readonly AppDbContext _context = new AppDbContext();
 
+        // Inserts a new user into the UserTable
         public int InsertUser(UserTable user)
         {
             using (var con = _context.GetConnection())
@@ -47,7 +50,7 @@ namespace Agri_Engergy_App.Models
                 // Hash the password
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-                // Insert
+                // Insert data into table
                 var cmd = con.CreateCommand();
                 cmd.CommandText = @"
                     INSERT INTO UserTable (UserName, UserSurname, UserEmail, Role, Password)

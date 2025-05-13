@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Agri_Engergy_App.Models
 {
+    // Controller-based service for handling farmer shortlisting logic
     public class ShortlistService : Controller
     {
         private readonly AppDbContext _context = new AppDbContext();
 
+        // Ensures the ShortlistedFarmers table exists
         public void EnsureTableCreated()
         {
             using var con = _context.GetConnection();
@@ -23,9 +25,10 @@ namespace Agri_Engergy_App.Models
             cmd.ExecuteNonQuery();
         }
 
+        // Adds a farmer to the shortlist for a specific employee
         public void AddToShortlist(int employeeId, int farmerUserId, string farmerName, string farmerSurname)
         {
-            EnsureTableCreated();
+            EnsureTableCreated();// Make sure table exists before inserting
             using var con = _context.GetConnection();
             var cmd = con.CreateCommand();
             cmd.CommandText = @"
@@ -38,6 +41,7 @@ namespace Agri_Engergy_App.Models
             cmd.ExecuteNonQuery();
         }
 
+        // Returns a list of all shortlisted farmers
         public List<ShortlistedFarmer> GetAllShortlisted()
         {
             EnsureTableCreated();
@@ -63,9 +67,9 @@ namespace Agri_Engergy_App.Models
             return results;
         }
 
+        // Retrieves all users with the role of 'Farmer' from the UserTable
         public List<UserModel> GetAllFarmers()
         {
-
             var farmers = new List<UserModel>();
             using var con = _context.GetConnection();
             con.Open();
@@ -87,10 +91,8 @@ namespace Agri_Engergy_App.Models
 
                 });
             }
-
             return farmers;
         }
-
 
     }
 }
