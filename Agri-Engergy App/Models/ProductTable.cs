@@ -19,6 +19,7 @@ namespace Agri_Engergy_App.Models
         public string ProductCategory { get; set; }
 
         [Required(ErrorMessage = "Product Price is required")]
+        [Range(1,int.MaxValue, ErrorMessage ="Price must be bigger then 0")]
         public int ProductPrice { get; set; }
 
         [Required(ErrorMessage = "Unit required")]
