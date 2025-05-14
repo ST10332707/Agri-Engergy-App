@@ -79,12 +79,17 @@ It enables authenticated users to view, filter, and manage product lists, with t
 - LoginFailed.cshtml
 ##### wwwroot/
 ##### Program.cs
+
 ## 5. GitHub Link
 Visit [GitHub](https://github.com/ST10332707/Agri-Engergy-App)
 
+## References
+- Visit [OpenAi](https://ghatgpt.com/)
+- Visit [ASP.NET Core Documentation](https://learn.microsoft.com/en-us/aspnet/core/)
+- Visit [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
+- Visit [GitHub Actions Guide](https://docs.github.com/en/actions)
 
 
+---
 
-
-
-
+# Thank you for using Agri-Engergy App
