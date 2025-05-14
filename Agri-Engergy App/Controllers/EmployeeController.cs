@@ -41,7 +41,7 @@ namespace Agri_Engergy_App.Controllers
         }
 
         // Display the list of shortlisted farmers (max 10) for specific employee
-        public IActionResult ShortlistedFarmers()
+        public IActionResult ShortlistedFarmers(string category, decimal? minPrice, decimal? maxPrice)
         {
             //Verify that user is an employee
             if (HttpContext.Session.GetString("UserRole") != "Employee")
@@ -75,6 +75,21 @@ namespace Agri_Engergy_App.Controllers
 
                     });
                 }
+            }
+
+            // filter through products (per farmer)
+            if (!string.IsNullOrEmpty(category) || minPrice.HasValue || maxPrice.HasValue)
+            {
+                shortlisted = shortlisted.Where(farmer =>
+                {
+                    var products = ProductTable.GetProductsByUserId(farmer.FarmerUserID);
+
+                    return products.Any(p =>
+                        (string.IsNullOrEmpty(category) || p.ProductCategory == category) &&
+                        (!minPrice.HasValue || p.ProductPrice >= minPrice.Value) &&
+                        (!maxPrice.HasValue || p.ProductPrice <= maxPrice.Value)
+                    );
+                }).ToList();
             }
 
             // If fewer than 10 shortlisted, fetch available farmers not already shortlisted
