@@ -10,19 +10,21 @@ namespace Agri_Engergy_App.Models
         [Key]
         public int ProductID { get; set; } // Unique ID for each product
 
-        [Required]
+        [Required(ErrorMessage = "Product Name is Required")]
+        [StringLength(50)]
         public string ProductName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Prodcut Category is Required")]
+        [StringLength(50)]
         public string ProductCategory { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Product Price is required")]
         public int ProductPrice { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Unit required")]
         public string UnitOfMeasurement { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Product date is Required")]
         public DateOnly ProductionDate { get; set; }
 
         [Required]
