@@ -40,85 +40,85 @@ namespace Agri_Engergy_App.Controllers
             return View(farmerProducts); // Pass grouped data to view
         }
 
-        // Display the list of shortlisted farmers (max 10) for specific employee
-        public IActionResult ShortlistedFarmers(string category, decimal? minPrice, decimal? maxPrice)
-        {
-            //Verify that user is an employee
-            if (HttpContext.Session.GetString("UserRole") != "Employee")
-                return Unauthorized();
+        //// Display the list of shortlisted farmers (max 10) for specific employee
+        //public IActionResult ShortlistedFarmers(string category, decimal? minPrice, decimal? maxPrice)
+        //{
+        //    //Verify that user is an employee
+        //    if (HttpContext.Session.GetString("UserRole") != "Employee")
+        //        return Unauthorized();
 
-            // Get employee ID from session
-            int? employeeId = HttpContext.Session.GetInt32("UserID");
+        //    // Get employee ID from session
+        //    int? employeeId = HttpContext.Session.GetInt32("UserID");
 
-            if (employeeId == null)
-                return RedirectToAction("Login", "Login");
+        //    if (employeeId == null)
+        //        return RedirectToAction("Login", "Login");
 
-            // Retrieve existing shortlisted farmers for this employee
-            var shortlisted = new List<ShortlistedFarmer>();
-            using (var con = _context.GetConnection())
-            {
-                con.Open();
-                var cmd = con.CreateCommand();
-                cmd.CommandText = "SELECT * FROM ShortlistedFarmers WHERE EmployeeID = $empId";
-                cmd.Parameters.AddWithValue("$empId", employeeId);
+        //    // Retrieve existing shortlisted farmers for this employee
+        //    var shortlisted = new List<ShortlistedFarmer>();
+        //    using (var con = _context.GetConnection())
+        //    {
+        //        con.Open();
+        //        var cmd = con.CreateCommand();
+        //        cmd.CommandText = "SELECT * FROM ShortlistedFarmers WHERE EmployeeID = $empId";
+        //        cmd.Parameters.AddWithValue("$empId", employeeId);
 
-                using var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    shortlisted.Add(new ShortlistedFarmer
-                    {
-                        Id = reader.GetInt32(reader.GetOrdinal("ID")),
-                        EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID")),
-                        FarmerUserID = reader.GetInt32(reader.GetOrdinal("FarmerUserID")),
-                        FarmerName = reader.GetString(reader.GetOrdinal("FarmerName")),
-                        FarmerSurname = reader.GetString(reader.GetOrdinal("FarmerSurname"))
+        //        using var reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            shortlisted.Add(new ShortlistedFarmer
+        //            {
+        //                Id = reader.GetInt32(reader.GetOrdinal("ID")),
+        //                EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID")),
+        //                FarmerUserID = reader.GetInt32(reader.GetOrdinal("FarmerUserID")),
+        //                FarmerName = reader.GetString(reader.GetOrdinal("FarmerName")),
+        //                FarmerSurname = reader.GetString(reader.GetOrdinal("FarmerSurname"))
 
-                    });
-                }
-            }
+        //            });
+        //        }
+        //    }
 
-            // filter through products (per farmer)
-            if (!string.IsNullOrEmpty(category) || minPrice.HasValue || maxPrice.HasValue)
-            {
-                shortlisted = shortlisted.Where(farmer =>
-                {
-                    var products = ProductTable.GetProductsByUserId(farmer.FarmerUserID);
+        //    // filter through products (per farmer)
+        //    if (!string.IsNullOrEmpty(category) || minPrice.HasValue || maxPrice.HasValue)
+        //    {
+        //        shortlisted = shortlisted.Where(farmer =>
+        //        {
+        //            var products = ProductTable.GetProductsByUserId(farmer.FarmerUserID);
 
-                    return products.Any(p =>
-                        (string.IsNullOrEmpty(category) || p.ProductCategory == category) &&
-                        (!minPrice.HasValue || p.ProductPrice >= minPrice.Value) &&
-                        (!maxPrice.HasValue || p.ProductPrice <= maxPrice.Value)
-                    );
-                }).ToList();
-            }
+        //            return products.Any(p =>
+        //                (string.IsNullOrEmpty(category) || p.ProductCategory == category) &&
+        //                (!minPrice.HasValue || p.ProductPrice >= minPrice.Value) &&
+        //                (!maxPrice.HasValue || p.ProductPrice <= maxPrice.Value)
+        //            );
+        //        }).ToList();
+        //    }
 
-            // If fewer than 10 shortlisted, fetch available farmers not already shortlisted
-            if (shortlisted.Count < 10) ////< 10
-            {
-                var availableFarmers = new List<UserModel>();
-                using var con = _context.GetConnection();
-                con.Open(); //////
-                var cmd = con.CreateCommand();
-                cmd.CommandText = @"
-                    SELECT * FROM UserTable 
-                    WHERE Role = 'Farmer' AND UserID NOT IN 
-                        (SELECT FarmerUserID FROM ShortlistedFarmers WHERE EmployeeID = $empId)";
-                cmd.Parameters.AddWithValue("$empId", employeeId);
-                using var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    availableFarmers.Add(new UserModel
-                    {
-                        UserID = reader.GetInt32(reader.GetOrdinal("UserID")),
-                        UserName = reader.GetString(reader.GetOrdinal("UserName")),
-                        UserSurname = reader.GetString(reader.GetOrdinal("UserSurname")),
+        //    // If fewer than 10 shortlisted, fetch available farmers not already shortlisted
+        //    if (shortlisted.Count < 10) ////< 10
+        //    {
+        //        var availableFarmers = new List<UserModel>();
+        //        using var con = _context.GetConnection();
+        //        con.Open(); //////
+        //        var cmd = con.CreateCommand();
+        //        cmd.CommandText = @"
+        //            SELECT * FROM UserTable 
+        //            WHERE Role = 'Farmer' AND UserID NOT IN 
+        //                (SELECT FarmerUserID FROM ShortlistedFarmers WHERE EmployeeID = $empId)";
+        //        cmd.Parameters.AddWithValue("$empId", employeeId);
+        //        using var reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            availableFarmers.Add(new UserModel
+        //            {
+        //                UserID = reader.GetInt32(reader.GetOrdinal("UserID")),
+        //                UserName = reader.GetString(reader.GetOrdinal("UserName")),
+        //                UserSurname = reader.GetString(reader.GetOrdinal("UserSurname")),
 
-                    });
-                }
-                ViewBag.AvailableFarmers = availableFarmers;
-            }
-                return View(shortlisted);
-        }
+        //            });
+        //        }
+        //        ViewBag.AvailableFarmers = availableFarmers;
+        //    }
+        //        return View(shortlisted);
+        //}
 
         // POST: Add a farmer to the current employee's shortlist
         [HttpPost]
@@ -176,6 +176,16 @@ namespace Agri_Engergy_App.Controllers
             }
                 return RedirectToAction("ShortlistedFarmers");
         }
+
+        public IActionResult FilteredProducts(string category, int? minPrice, int? maxPrice)
+{
+    // Verify employee access
+    if (HttpContext.Session.GetString("UserRole") != "Employee")
+        return Unauthorized();
+
+    var filteredProducts = ProductTable.FilterProducts(category, minPrice, maxPrice);
+    return View(filteredProducts);
+}
 
     }
 }

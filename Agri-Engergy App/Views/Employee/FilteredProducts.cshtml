@@ -1,0 +1,65 @@
+﻿@model List<Agri_Engergy_App.Models.ProductTable>
+@{
+    ViewData["Title"] = "Filter Products";
+}
+
+<h2>Filter Products</h2>
+
+<form method="get" asp-action="FilteredProducts">
+    <div class="row mb-3">
+        <div class="col">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                <option value="Fruit">Fruit</option>
+                <option value="Vegetable">Vegetable</option>
+                <option value="Meat">Meat</option>
+                <option value="Dairy">Dairy</option>
+                <option value="Grains">Grains</option>
+            </select>
+        </div>
+        <div class="col">
+            <input type="number" name="minPrice" class="form-control" placeholder="Min Price" />
+        </div>
+        <div class="col">
+            <input type="number" name="maxPrice" class="form-control" placeholder="Max Price" />
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Unit</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.ProductName</td>
+                    <td>@product.ProductCategory</td>
+                    <td>@product.ProductPrice</td>
+                    <td>@product.UnitOfMeasurement</td>
+                    <td>@product.ProductionDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No products found matching your filters.</p>
+}
+
+<div class="text-center mt-3">
+    <a asp-controller="Employee" asp-action="Index" class="btn btn-success">Back to Dashboard</a>
+</div>

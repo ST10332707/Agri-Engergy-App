@@ -199,6 +199,58 @@ namespace Agri_Engergy_App.Models
         }
 
 
+        ///////
+        public static List<ProductTable> FilterProducts(string category = null, int? minPrice = null, int? maxPrice = null)
+        {
+            var products = new List<ProductTable>();
+            var _context = new AppDbContext();
+
+            using (var con = _context.GetConnection())
+            {
+                con.Open();
+                var cmd = con.CreateCommand();
+
+                var query = "SELECT * FROM ProductTable WHERE 1=1";
+
+                if (!string.IsNullOrEmpty(category))
+                {
+                    query += " AND ProductCategory = $category";
+                    cmd.Parameters.AddWithValue("$category", category);
+                }
+
+                if (minPrice.HasValue)
+                {
+                    query += " AND ProductPrice >= $minPrice";
+                    cmd.Parameters.AddWithValue("$minPrice", minPrice.Value);
+                }
+
+                if (maxPrice.HasValue)
+                {
+                    query += " AND ProductPrice <= $maxPrice";
+                    cmd.Parameters.AddWithValue("$maxPrice", maxPrice.Value);
+                }
+
+                cmd.CommandText = query;
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        products.Add(new ProductTable
+                        {
+                            ProductID = reader.GetInt32(reader.GetOrdinal("ProductID")),
+                            ProductName = reader.GetString(reader.GetOrdinal("ProductName")),
+                            ProductCategory = reader.GetString(reader.GetOrdinal("ProductCategory")),
+                            ProductPrice = reader.GetInt32(reader.GetOrdinal("ProductPrice")),
+                            UnitOfMeasurement = reader.GetString(reader.GetOrdinal("UnitOfMeasurement")),
+                            ProductionDate = DateOnly.Parse(reader.GetString(reader.GetOrdinal("ProductionDate")))
+                        });
+                    }
+                }
+            }
+            return products;
+
+        }
 
     }
 }
