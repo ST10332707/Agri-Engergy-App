@@ -9,7 +9,15 @@ namespace Agri_Engergy_App.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly AppDbContext _context = new AppDbContext();
+
+        private readonly AppDbContext _context;
+        private readonly ILogger<LoginController> _logger;
+
+        public LoginController(AppDbContext context, ILogger<LoginController> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
 
         [HttpGet]
         public IActionResult Login()
